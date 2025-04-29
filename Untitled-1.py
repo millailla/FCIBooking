@@ -1,4 +1,4 @@
-lass booking_system:
+class booking_system:
     
     def book_room(username, room_number, date):
         for booking in bookings :
