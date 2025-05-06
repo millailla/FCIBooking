@@ -19,10 +19,21 @@ def setup_database():
             username TEXT,
             room_number TEXT,
             date TEXT,
-            FOREIGN KEY(username) REFERENCES users(username)
+            FOREIGN KEY(username) REFERENCES users(username),
+            FOREIGN KEY(room_number) REFERENCES rooms(room_number)
          )
      """)
-
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS rooms(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            room_number TEXT,
+            room_capacity TEXT,
+            room_facilities TEXT,
+            room_status TEXT
+         )
+     """)
+     
     conn.commit()
     conn.close()
 
