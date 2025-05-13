@@ -41,7 +41,6 @@ def log_out():
         return "no user logged in" 
     
 def add_room(room_number):
-    """Add a room to the rooms table."""
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
@@ -53,6 +52,20 @@ def add_room(room_number):
         return "Room already exists."
     finally:
         conn.close()
+
+def view_rooms():
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM rooms")
+    rooms = cursor.fetchall()
+
+    conn.close()
+
+    if not rooms:
+        return "No rooms available."
+    
+    return rooms
 
 #testing
 print(add_user("ash1542", "ashmielqayyiem1542@gmail.com", "ayamas"))
