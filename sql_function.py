@@ -39,6 +39,20 @@ def log_out():
         return f"{user} logged out"
     else:
         return "no user logged in" 
+    
+def add_room(room_number):
+    """Add a room to the rooms table."""
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("INSERT INTO rooms (room_number) VALUES (?)", (room_number,))
+        conn.commit()
+        return f"Room {room_number} added successfully."
+    except sqlite3.IntegrityError:
+        return "Room already exists."
+    finally:
+        conn.close()
 
 #testing
 print(add_user("ash1542", "ashmielqayyiem1542@gmail.com", "ayamas"))
