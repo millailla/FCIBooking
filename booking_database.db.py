@@ -27,7 +27,7 @@ def setup_database():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS rooms(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            room_number TEXT,
+            room_number TEXT NOT NULL UNIQUE,
             room_capacity TEXT,
             room_facilities TEXT,
             room_status TEXT
