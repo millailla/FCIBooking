@@ -1,5 +1,6 @@
 import sqlite3
 
+session = {"logged_in": None}
 
 def add_user(username, email, password):
     conn = sqlite3.connect("booking_database.db")
@@ -14,5 +15,32 @@ def add_user(username, email, password):
     finally:
        conn.close()
 
+def login(username, password):
+    global session
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+    user = cursor.fetchone()
+
+    conn.close()
+
+    if user:
+        session ["logged_in"] = username
+        return f"{username} logged in"
+    else:
+        return "Invalid username or password"
+    
+def log_out():
+    global session
+    if session["logged_in"]:
+        user = session["logged_in"]
+        session["logged_in"] = None
+        return f"{user} logged out"
+    else:
+        return "no user logged in" 
+
 #testing
 print(add_user("ash1542", "ashmielqayyiem1542@gmail.com", "ayamas"))
+
+print(login("ash1542", "ayamas"))
