@@ -40,16 +40,52 @@ def log_out():
     else:
         return "no user logged in" 
     
-def add_room(room_number):
+def add_room(room_number, room_capacity, room_facilities, room_status):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
     try:
-        cursor.execute("INSERT INTO rooms (room_number) VALUES (?)", (room_number,))
+        cursor.execute("INSERT INTO rooms (room_number, room_capacity, room_facilities, room_status) VALUES (?, ?, ?, ?)", (room_number, room_capacity, room_facilities, room_status))
         conn.commit()
         return f"Room {room_number} added successfully."
     except sqlite3.IntegrityError:
         return "Room already exists."
+    finally:
+        conn.close()
+
+def update_room(room_number, room_capacity=None, room_facilities=None, room_status=None):
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    try:
+        updates = []
+        values = []
+
+        if room_capacity is not None:
+            updates.append("room_capacity = ?")
+            values.append(room_capacity)
+
+        if room_facilities is not None:
+            updates.append("room_facilities = ?")
+            values.append(room_facilities)
+
+        if room_status is not None:
+            updates.append("room_status = ?")
+            values.append(room_status)
+
+        if not updates:
+            return "No update values provided."
+
+        values.append(room_number)
+        update_query = f"UPDATE rooms SET {', '.join(updates)} WHERE room_number = ?"
+
+        cursor.execute(update_query, values)
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            return f"No room found with number {room_number}."
+        return f"Room {room_number} updated successfully."
+
     finally:
         conn.close()
 
@@ -71,3 +107,5 @@ def view_rooms():
 print(add_user("ash1542", "ashmielqayyiem1542@gmail.com", "ayamas"))
 
 print(login("ash1542", "ayamas"))
+
+print(add_room("CQAR1002", "40" ,"projector,tv,whiteboard", "ready"))
