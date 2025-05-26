@@ -2,12 +2,15 @@ import sqlite3
 
 session = {"logged_in": None}
 
-def add_user(username, email, password):
+def is_admin():
+    return session.get("role") == "admin"
+
+def add_user(username, email, password, role):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
     try:
-        cursor.execute("INSERT INTO users(username, email, password) VALUES (?, ?, ?)", (username, email, password))
+        cursor.execute("INSERT INTO users(username, email, password, role) VALUES (?, ?, ?, ?)", (username, email, password, role))
         conn.commit()
         return "user added"
     except sqlite3.IntegrityError:
@@ -20,14 +23,14 @@ def login(username, password):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+    cursor.execute("SELECT username, role FROM users WHERE username = ? AND password = ?", (username, password))
     user = cursor.fetchone()
-
     conn.close()
 
     if user:
-        session ["logged_in"] = username
-        return f"{username} logged in"
+        session ["logged_in"] = user[0]
+        session["role"] = user [1]
+        return f"{username} logged in as {user[1]}"
     else:
         return "Invalid username or password"
     
@@ -108,4 +111,4 @@ print(add_user("ash1542", "ashmielqayyiem1542@gmail.com", "ayamas"))
 
 print(login("ash1542", "ayamas"))
 
-print(add_room("CQAR1002", "40" ,"projector,tv,whiteboard", "ready"))
+print(add_room("CQAR1003", "40" ,"projector,tv,whiteboard", "ready"))
