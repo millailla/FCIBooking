@@ -34,6 +34,26 @@ def verify_user(username, password):
 def index():
     return render_template('index.html')  
 
+# Home page route
+@app.route('/home', methods=['GET'])
+def home():
+    return render_template('index.html')  # Render the index.html template
+
+# About page route
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html')  # Render the about.html template
+
+# Contact page route
+@app.route('/contact', methods=['GET'])
+def contact():
+    return render_template('contacts.html')  # Render the contacts.html template
+
+# Rooms page route
+@app.route('/rooms', methods=['GET'])
+def rooms():
+    return render_template('rooms.html')  # Render the rooms.html template
+
 # Registration route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
