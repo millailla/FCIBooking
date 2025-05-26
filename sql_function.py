@@ -44,6 +44,9 @@ def log_out():
         return "no user logged in" 
     
 def add_room(room_number, room_capacity, room_facilities, room_status):
+    if not is_admin():
+        return "Restricted access,please contact admin."
+    
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
@@ -57,6 +60,9 @@ def add_room(room_number, room_capacity, room_facilities, room_status):
         conn.close()
 
 def update_room(room_number, room_capacity=None, room_facilities=None, room_status=None):
+    if not is_admin():
+        return "Restricted access,please contact admin"
+    
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
@@ -107,7 +113,7 @@ def view_rooms():
     return rooms
 
 #testing
-print(add_user("ash1542", "ashmielqayyiem1542@gmail.com", "ayamas"))
+print(add_user("ash", "ASHMIEL.QAYYIEM.MOHAMED1@student.mmu.edu.my", "ayamas", role="admin"))
 
 print(login("ash1542", "ayamas"))
 
