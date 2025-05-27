@@ -112,9 +112,20 @@ def view_rooms():
     
     return rooms
 
+def delete_room(room_number):
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM rooms WHERE room_number = ?", (room_number,))
+
+    conn.commit()
+    conn.close()
+
+    return f"Room {room_number} deleted."
+
 #testing
 print(add_user("ash", "ASHMIEL.QAYYIEM.MOHAMED1@student.mmu.edu.my", "ayamas", role="admin"))
 
 print(login("ash", "ayamas"))
 
-print(update_room("CQAR1001", "40" ,"projector,tv,whiteboard", "ready"))
+print(add_room("CQAR1001", "40" ,"projector,tv,whiteboard", "ready"))
