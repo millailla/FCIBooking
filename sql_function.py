@@ -115,6 +115,6 @@ def view_rooms():
 #testing
 print(add_user("ash", "ASHMIEL.QAYYIEM.MOHAMED1@student.mmu.edu.my", "ayamas", role="admin"))
 
-print(login("ash1542", "ayamas"))
+print(login("ash", "ayamas"))
 
-print(add_room("CQAR1003", "40" ,"projector,tv,whiteboard", "ready"))
+print(update_room("CQAR1001", "40" ,"projector,tv,whiteboard", "ready"))

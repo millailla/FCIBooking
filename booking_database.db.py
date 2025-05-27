@@ -10,7 +10,8 @@ def setup_database():
             username TEXT NOT NULL UNIQUE,
             email TEXT,
             password TEXT,
-            role TEXT DEFAULT 'user'
+            role TEXT DEFAULT 'user',
+            is_approved INTEGER DEFAULT 0
          )
      """)
 
