@@ -2,7 +2,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FCI Booking</title>
-    <link rel="stylesheet" href="style.about.css">
+    <link rel="stylesheet" href="../static/css/style.contacts.css">
 </head>
 
 <body>
@@ -10,10 +10,16 @@
         <h1>FCI Booking</h1>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="rooms.html">Rooms</a></li>
-                <li><a href="contacts.html">Contact</a></li>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/rooms">Rooms</a></li>
+                <li><a href="/contacts">Contact</a></li>
+                 <li><a href="/register">Register</a></li>
+                {% if session.username %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
