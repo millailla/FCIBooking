@@ -5,14 +5,14 @@ session = {"logged_in": None}
 def is_admin():
     return session.get("role") == "admin"
 
-def add_user(username, email, password, role):
+def add_user(username, email, password, role="user"):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
     try:
-        cursor.execute("INSERT INTO users(username, email, password, role) VALUES (?, ?, ?, ?)", (username, email, password, role))
+        cursor.execute("INSERT INTO users(username, email, password, role, is_approved) VALUES (?, ?, ?, ?, ?)", (username, email, password, role, 0 if role == "admin" else 1))
         conn.commit()
-        return "user added"
+        return "User added. Admins registration require admins approval"
     except sqlite3.IntegrityError:
        return "username already in use"
     finally:
@@ -23,11 +23,13 @@ def login(username, password):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
-    cursor.execute("SELECT username, role FROM users WHERE username = ? AND password = ?", (username, password))
+    cursor.execute("SELECT username, role, is_approved FROM users WHERE username = ? AND password = ?", (username, password))
     user = cursor.fetchone()
     conn.close()
 
     if user:
+        if user[1] == "admin" and user[2] == 0:
+            return "Admin account is not yet approved."
         session ["logged_in"] = user[0]
         session["role"] = user [1]
         return f"{username} logged in as {user[1]}"
@@ -124,8 +126,7 @@ def delete_room(room_number):
     return f"Room {room_number} deleted."
 
 #testing
-print(add_user("ash", "ASHMIEL.QAYYIEM.MOHAMED1@student.mmu.edu.my", "ayamas", role="admin"))
 
-print(login("ash", "ayamas"))
 
-print(add_room("CQAR1001", "40" ,"projector,tv,whiteboard", "ready"))
+print(login("ash1542", "ayamas"))
+
