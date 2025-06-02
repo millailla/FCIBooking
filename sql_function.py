@@ -130,3 +130,10 @@ def delete_room(room_number):
 
 print(login("ash1542", "ayamas"))
 
+conn = sqlite3.connect("booking_database.db")
+cursor = conn.cursor()
+
+cursor.execute("ALTER TABLE bookings ADD COLUMN time TEXT")
+
+conn.commit()
+conn.close()

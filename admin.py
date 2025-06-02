@@ -16,4 +16,5 @@ def approve_admin(username):
     conn.close()
     return f"{username} has been approved as admin."
 
-print(approve_admin("ash"))
+
+print(list_pending_admins)
