@@ -2,81 +2,102 @@ body {
     font-family: 'Times New Roman', Times, serif, sans-serif;
     margin: 0;
     padding: 0;
-    text-align: center;
-}
-
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
+    background-color: #f4f4f4;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    height: 100vh;
 }
 
-header .logo {
-    font-size: 24px;
-    font-weight: bold;
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-}
-
-.hero {
-    background: no-repeat center center/cover;
-    color: white;
+h1 {
     text-align: center;
-    padding: 100px 20px;
+    margin-bottom: 30px;
+    color: #333;
 }
 
-.search-form {
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.footer {
+    text-align: center;
     margin-top: 20px;
 }
 
-.search-form input {
-    padding: 10px;
-    margin: 5px;
-    border: black;
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.flashes li {
+    padding: 12px;
+    margin: 10px 0;
     border-radius: 5px;
 }
 
-.search-form button {
-    padding: 10px 20px;
-    border: black;
-    border-radius: 5px;
-    background-color: #ff5722;
-    color: white;
-    cursor: pointer;
+.flashes .success {
+    background-color: #d4edda;
+    color: #155724;
 }
 
-.featured {
-    padding: 20px;
-    text-align: center;
-}
-
-.listing {
-    display: inline-block;
-    width: 30%;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: relative;
-    bottom: 0;
-    width: 100%;
+.flashes .error {
+    background-color: #f8d7da;
+    color: #721c24;
 }
