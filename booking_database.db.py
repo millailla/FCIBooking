@@ -21,6 +21,7 @@ def setup_database():
             username TEXT,
             room_number TEXT,
             date TEXT,
+            time TEXT,
             FOREIGN KEY(username) REFERENCES users(username),
             FOREIGN KEY(room_number) REFERENCES rooms(room_number)
          )
