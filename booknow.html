@@ -1,25 +1,35 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FCI Booking</title>
-    <link rel="stylesheet" href="style.booknow.css">
+    <link rel="stylesheet" href="../static/css/style.booknow.css">
+    <title>Book Now</title>
 </head>
 <body>
-    <header>
-        <h1>FCI Booking</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="rooms.html">Rooms</a></li>
-                <li><a href="contacts.html">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="container">
+        <h1>Book Now</h1>
 
-    <h2>Book Now</h2>
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
-    <form action="/booking_database.db" method="post">
+        <form action="{{ url_for('book_now') }}" method="POST">
+            <div class="form-group">
+                <label for="room_number">Room Number:</label>
+                <select id="room_number" name="room_number" required>
+                    {% for room in rooms %}
+                        <option value="{{ room[0] }}">{{ room[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="form-group">
                 <label for="name">Full Name:</label>
                 <input type="text" id="name" name="name" required>
@@ -37,20 +47,13 @@
                 <input type="time" name="time" id="time" required>
             </div>
             <div class="form-group">
-                <label for="service">Service:</label>
-                <select name="service" id="service" required>
-                <option value="">-- Select a Service --</option>
-                <option value="massage">Massage</option>
-                <option value="consultation">Consultation</option>
-                <option value="spa">Spa Treatment</option>
-                </select>
-            </div>
-            <div class="form-group">
                 <label for="notes">Additional Notes:</label>
                 <textarea name="notes" id="notes" rows="4"></textarea>
             </div>
             <button type="submit">Book Now</button>
         </form>
-
+    </div>
 </body>
 </html>
+
+
