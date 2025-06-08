@@ -114,6 +114,41 @@ def view_rooms():
     
     return rooms
 
+
+def book_room(username, room_number, date, time):
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT is_approved FROM users WHERE username = ?", (username,))
+        user = cursor.fetchone()
+        if not user:
+            return "User does not exist."
+
+        cursor.execute("SELECT * FROM rooms WHERE room_number = ?", (room_number,))
+        if not cursor.fetchone():
+            return f"Room {room_number} does not exist."
+
+        cursor.execute("""
+            SELECT * FROM bookings
+            WHERE room_number = ? AND date = ? AND time = ?
+        """, (room_number, date, time))
+        if cursor.fetchone():
+            return f"Room {room_number} is already booked on {date} at {time}."
+
+        cursor.execute("""
+            INSERT INTO bookings (username, room_number, date, time)
+            VALUES (?, ?, ?, ?)
+        """, (username, room_number, date, time))
+        conn.commit()
+        return f"Room {room_number} successfully booked by {username} on {date} at {time}."
+
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+    finally:
+        conn.close()
+
 def delete_room(room_number):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
@@ -129,4 +164,4 @@ def delete_room(room_number):
 
 
 print(login("ash1542", "ayamas"))
-
+print(book_room("ash", "CQAR1001", "2025-06-15", "10:00"))
