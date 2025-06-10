@@ -36,11 +36,19 @@
     {% endwith %}
     
         <section class="hero">
-            <h1>Find Your Perfect Room</h1>
-            <form class="search-form">
-                <button type="button" onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
-            </form>
-        </section>
+    <h1>Find Your Perfect Room</h1>
+    <p>
+        Book your ideal educational space easily. Browse available rooms or view your bookings.
+    </p>
+     <div class="hero-buttons" style="display:flex; flex-direction: column; align-items: center;">
+       <button type="button" class="btn-primary" onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
+      {% if session.username %}
+       <button type="button" class="btn-secondary" onclick="location.href='{{ url_for('my_bookings') }}'">View My Bookings</button>
+      {% endif %}
+     </div>
+
+</section>
+0bcb9a3 (updated homepage with view my bookings button)
 
         <h2>Click here to book your room now.<br> Available rooms can be viewed on the Room page located at the top right corner.</h2>
 
