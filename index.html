@@ -1,0 +1,78 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCI Booking</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>FCI Booking</h1>
+        <nav>
+            <ul>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/rooms">Rooms</a></li>
+                <li><a href="/contacts">Contact</a></li>
+                 <li><a href="/register">Register</a></li>
+                {% if session.username %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+   <main>
+    <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+        <section class="hero">
+    <h1>Find Your Perfect Room</h1>
+    <p>
+        Book your ideal educational space easily. Browse available rooms or view your bookings.
+    </p>
+    <div class="hero-buttons" style="display:flex; flex-direction: column; align-items: center;">
+    <button type="button" class="btn-primary" onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
+    {% if session.username %}
+    <button type="button" class="btn-secondary" onclick="location.href='{{ url_for('my_bookings') }}'">View My Bookings</button>
+    {% endif %}
+</div>
+
+</section>
+
+        <h2>Click here to book your room now.<br> Available rooms can be viewed on the Room page located at the top right corner.</h2>
+
+        <section class="featured">
+            <h2>Featured Listings</h2>
+            <div class="listing">
+                <h3>CQMX 0001</h3>
+                <p>Perfect for a lecture session</p>
+                <button onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
+            </div>
+            <div class="listing">
+                <h3>CQAR 3004</h3>
+                <p>Can fit up to 35 people</p>
+                <button onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
+            </div>
+            <div class="listing">
+                <h3>CQCR 2002</h3>
+                <p>Perfect room to have a tutorial session</p>
+                <button onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 FCI Booking. All rights reserved.</p>
+    </footer>
+</body>
+</html>
