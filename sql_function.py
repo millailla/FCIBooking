@@ -115,7 +115,12 @@ def view_rooms():
     return rooms
 
 
-def book_room(username, room_number, date, time):
+def book_room(room_number, date, time):
+    if not session["logged_in"]:
+        return "User is not logged in."
+
+    username = session["logged_in"]
+
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
@@ -124,6 +129,8 @@ def book_room(username, room_number, date, time):
         user = cursor.fetchone()
         if not user:
             return "User does not exist."
+        if user[0] == 0:
+            return "User is not approved to make bookings."
 
         cursor.execute("SELECT * FROM rooms WHERE room_number = ?", (room_number,))
         if not cursor.fetchone():
@@ -141,6 +148,7 @@ def book_room(username, room_number, date, time):
             VALUES (?, ?, ?, ?)
         """, (username, room_number, date, time))
         conn.commit()
+
         return f"Room {room_number} successfully booked by {username} on {date} at {time}."
 
     except Exception as e:
