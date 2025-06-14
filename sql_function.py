@@ -160,6 +160,22 @@ def delete_room(room_number):
 
     return f"Room {room_number} deleted."
 
+def cancel_booking(username, booking_id):
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM bookings WHERE id = ? AND username = ?", (booking_id, username))
+    booking = cursor.fetchone()
+
+    if booking:
+        cursor.execute("DELETE FROM bookings WHERE id = ?", (booking_id,))
+        conn.commit()
+        result = f"Booking ID {booking_id} canceled successfully by user {username}."
+    else:
+        result = "Booking not found or you do not have permission to cancel it."
+
+    conn.close()
+    return result
 #testing
 
 
