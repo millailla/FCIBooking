@@ -1,6 +1,5 @@
 import sqlite3
 
-session = {"logged_in": None}
 
 def is_admin():
     return session.get("role") == "admin"
@@ -19,7 +18,6 @@ def add_user(username, email, password, role="user"):
        conn.close()
 
 def login(username, password):
-    global session
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
@@ -30,11 +28,9 @@ def login(username, password):
     if user:
         if user[1] == "admin" and user[2] == 0:
             return "Admin account is not yet approved."
-        session ["logged_in"] = user[0]
-        session["role"] = user [1]
-        return f"{username} logged in as {user[1]}"
+        return {"username": user[0], "role": user[1]}, f"{user[0]} logged in as {user[1]}"
     else:
-        return "Invalid username or password"
+        return None,"Invalid username or password"
     
 def log_out():
     global session
@@ -45,8 +41,8 @@ def log_out():
     else:
         return "no user logged in" 
     
-def add_room(room_number, room_capacity, room_facilities, room_status):
-    if not is_admin():
+def add_room(room_number, room_capacity, room_facilities, room_status, user_role):
+    if user_role != "admin":
         return "Restricted access,please contact admin."
     
     conn = sqlite3.connect("booking_database.db")
@@ -61,8 +57,8 @@ def add_room(room_number, room_capacity, room_facilities, room_status):
     finally:
         conn.close()
 
-def update_room(room_number, room_capacity=None, room_facilities=None, room_status=None):
-    if not is_admin():
+def update_room(room_number, room_capacity=None, room_facilities=None, room_status=None, user_role=None):
+    if user_role != "admin":
         return "Restricted access,please contact admin"
     
     conn = sqlite3.connect("booking_database.db")
@@ -115,11 +111,7 @@ def view_rooms():
     return rooms
 
 
-def book_room(room_number, date, time):
-    if not session["logged_in"]:
-        return "User is not logged in."
-
-    username = session["logged_in"]
+def book_room(username, room_number, date, time):
 
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
@@ -157,7 +149,10 @@ def book_room(room_number, date, time):
     finally:
         conn.close()
 
-def delete_room(room_number):
+def delete_room(room_number, user_role):
+    if user_role != "admin":
+        return "Restricted access, please contact admin."
+
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
