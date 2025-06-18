@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Bookings - FCI Booking</title>
+    <link rel="stylesheet" href="../static/css/style.mybookings.css" />
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            color: #6b7280;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto 80px;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+        thead {
+            font-weight: 700;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+        tbody tr {
+            background: #f9fafb;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        tbody tr td {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin: 6px 0;
+        }
+        .no-bookings {
+            text-align: center;
+            font-size: 18px;
+            color: #4b5563;
+            margin-bottom: 24px;
+        }
+        .btn-book-now {
+            background-color: #111827;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 18px;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .btn-book-now:hover {
+            background-color: #374151;
+        }
+        footer {
+            margin-top: auto;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FCI Booking</h1>
+        <nav>
+            <ul style="list-style:none; display:flex; gap:16px; justify-content:center; padding:0;">
+                <li><a href="/index">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/rooms">Rooms</a></li>
+                <li><a href="/contacts">Contact</a></li>
+                <li><a href="/register">Register</a></li>
+                {% if session.username %}
+                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/my-bookings" style="font-weight:700; text-decoration:underline;">My Bookings</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>My Bookings</h1>
+
+            {% if bookings %}
+            <table role="table" aria-label="User's bookings">
+                <thead>
+                    <tr>
+                        <th scope="col">Room Number</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.room_number }}</td>
+                        <td>{{ booking.date }}</td>
+                        <td>{{ booking.time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="no-bookings">No bookings have been made yet.</p>
+            <div style="text-align:center;">
+                <a href="/book-now" class="btn-book-now" role="button">Book Now</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 FCI Booking. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
