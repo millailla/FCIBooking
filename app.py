@@ -35,7 +35,7 @@ def index():
     return render_template('index.html')  
 
 # Home page route
-@app.route('/home', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def home():
     return render_template('index.html')  # Render the index.html template
 
@@ -45,7 +45,7 @@ def about():
     return render_template('about.html')  # Render the about.html template
 
 # Contact page route
-@app.route('/contact', methods=['GET'])
+@app.route('/contacts', methods=['GET'])
 def contact():
     return render_template('contacts.html')  # Render the contacts.html template
 
@@ -98,3 +98,13 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+ 

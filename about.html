@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCI Booking</title>
+    <link rel="stylesheet" href="../static/css/style.about.css">
+</head>
+
+<body>
+    <header>
+        <h1>FCI Booking</h1>
+        <nav>
+            <ul>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/rooms">Rooms</a></li>
+                <li><a href="/contacts">Contact</a></li>
+                 <li><a href="/register">Register</a></li>
+                {% if session.username %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    <body>
+    <p>Welcome to our FCI Booking website, your one-stop solution for reserving educational spaces tailored to meet your learning needs. Whether you're an educator looking for a venue for your next lecture, a student organization planning a study group, or a corporate team seeking a collaborative environment, our platform offers a user-friendly interface to browse and book classrooms with ease. With detailed descriptions and real-time availability, you can find the perfect space that fits your requirements. Our website also features flexible booking options, allowing you to reserve classrooms by the hour or for extended periods, ensuring you have the right environment for your activities. Join us today and experience seamless classroom booking that enhances your educational experience!</p>
+    </body>
+
+    </body>
+    <footer>
+        <p>&copy; 2023 FCI Booking. All rights reserved.</p>
+    </footer>
+</body>
+</html>

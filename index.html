@@ -40,7 +40,7 @@
     <p>
         Book your ideal educational space easily. Browse available rooms or view your bookings.
     </p>
-    <div class="hero-buttons" style="display:flex; flex-direction: column; align-items: center;">
+<div class="hero-buttons" style="display:flex; flex-direction: column; align-items: center;">
     <button type="button" class="btn-primary" onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
     {% if session.username %}
     <button type="button" class="btn-secondary" onclick="location.href='{{ url_for('my_bookings') }}'">View My Bookings</button>

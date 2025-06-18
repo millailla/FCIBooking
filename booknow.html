@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.booknow.css">
+    <title>Book Now</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Now</h1>
+
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('book_now') }}" method="POST">
+            <div class="form-group">
+                <label for="room_number">Room Number:</label>
+                <select id="room_number" name="room_number" required>
+                    {% for room in rooms %}
+                        <option value="{{ room[0] }}">{{ room[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="date">Booking Date:</label>
+                <input type="date" name="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Time:</label>
+                <input type="time" name="time" id="time" required>
+            </div>
+            <div class="form-group">
+                <label for="notes">Additional Notes:</label>
+                <textarea name="notes" id="notes" rows="4"></textarea>
+            </div>
+            <button type="submit">Book Now</button>
+        </form>
+    </div>
+</body>
+</html>
+
+
