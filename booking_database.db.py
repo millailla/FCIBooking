@@ -22,6 +22,8 @@ def setup_database():
             room_number TEXT,
             date TEXT,
             time TEXT,
+            start_time TEXT,
+            end_time TEXT,
             FOREIGN KEY(username) REFERENCES users(username),
             FOREIGN KEY(room_number) REFERENCES rooms(room_number)
          )
@@ -39,15 +41,6 @@ def setup_database():
      
     conn.commit()
     conn.close()
-
-
-conn = sqlite3.connect("booking_database.db")
-cursor = conn.cursor()
-
-cursor.execute("ALTER TABLE bookings ADD COLUMN start_time TEXT")
-
-conn.commit()
-conn.close()
 
 if __name__ == "__main__":
     setup_database()
