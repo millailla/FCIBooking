@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/style.booknow.css">
-    <title>Book Now</title>
+    <title>Book Now - FCI Booking</title>
 </head>
 <body>
+    <header>
+    <div class="logo">FCI Booking</div>
+    <nav>
+        <ul>
+            <li><a href="/index">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/rooms">Rooms</a></li>
+            <li><a href="/contacts">Contact</a></li>
+            <li><a href="/register">Register</a></li>
+            {% if session.username %}
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/my-bookings" style="font-weight:700; text-decoration:underline;">My Bookings</a></li>
+                {% if user_role == 'admin' %}
+                    <li><a href="/admin">Admin</a></li>
+                {% endif %}
+            {% else %}
+                <li><a href="/login">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    </header>
+
     <div class="container">
         <h1>Book Now</h1>
 
@@ -31,20 +53,14 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address:</label>
-                <input type="email" name="email" id="email" required>
-            </div>
-            <div class="form-group">
                 <label for="date">Booking Date:</label>
                 <input type="date" name="date" id="date" required>
             </div>
             <div class="form-group">
-                <label for="time">Time:</label>
-                <input type="time" name="time" id="time" required>
+                <label for="start_time">Start Time:</label>
+                <input type="time" id="start_time" name="start_time" required>
+                <label for="end_time">End Time:</label>
+                <input type="time" id="end_time" name="end_time" required>
             </div>
             <div class="form-group">
                 <label for="notes">Additional Notes:</label>
@@ -53,7 +69,12 @@
             <button type="submit">Book Now</button>
         </form>
     </div>
+
+    <footer>
+        <p>&copy; 2023 FCI Booking. All rights reserved.</p>
+    </footer>
 </body>
 </html>
+
 
 

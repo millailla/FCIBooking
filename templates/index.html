@@ -9,13 +9,17 @@
         <h1>FCI Booking</h1>
         <nav>
             <ul>
-                <li><a href="/index">Home</a></li>
+                <<li><a href="/index">Home</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/rooms">Rooms</a></li>
                 <li><a href="/contacts">Contact</a></li>
-                 <li><a href="/register">Register</a></li>
+                <li><a href="/register">Register</a></li>
                 {% if session.username %}
                     <li><a href="/logout">Logout</a></li>
+                    <li><a href="/my-bookings" style="font-weight:700; text-decoration:underline;">My Bookings</a></li>
+                    {% if user_role == 'admin' %}
+                        <li><a href="/admin">Admin</a></li>
+                    {% endif %}
                 {% else %}
                     <li><a href="/login">Login</a></li>
                 {% endif %}
@@ -40,7 +44,7 @@
     <p>
         Book your ideal educational space easily. Browse available rooms or view your bookings.
     </p>
-<div class="hero-buttons" style="display:flex; flex-direction: column; align-items: center;">
+    <div class="hero-buttons" style="display:flex; flex-direction: column; align-items: center;">
     <button type="button" class="btn-primary" onclick="location.href='{{ url_for('book_now') }}'">Book Now</button>
     {% if session.username %}
     <button type="button" class="btn-secondary" onclick="location.href='{{ url_for('my_bookings') }}'">View My Bookings</button>

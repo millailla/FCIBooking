@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../static/css/styles.admin.css">
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <h1>Admin Panel</h1>
+        <div class="user-info">
+            <span>Administrator</span>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <button class="nav-btn" onclick="showSection(event, 'recent-bookings')">Recent Bookings</button>
+        <button class="nav-btn" onclick="showSection(event, 'add-room')">Add Room</button>
+        <button class="nav-btn" onclick="showSection(event, 'delete-room')">Delete Room</button>
+        <button class="nav-btn" onclick="showSection(event, 'update-room')">Update Room</button>
+        <button class="nav-btn" onclick="showSection(event, 'room-list')">Room List</button>
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Flash Messages -->
+            <div id="flash-messages" class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        <!-- Recent Bookings Section (default visible) -->
+        <div id="recent-bookings" class="content-section">
+            <h2>Recent Bookings</h2>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Guest Name</th>
+                        <th>Room</th>
+                        <th>Check-In</th>
+                        <th>Check-Out</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking[0] }}</td> <!-- Booking ID -->
+                            <td>{{ booking[1] }}</td> <!-- Username -->
+                            <td>{{ booking[2] }}</td> <!-- Room -->
+                            <td>{{ booking[3] }}</td> <!-- Date -->
+                            <td>{{ booking[4] }}</td> <!-- Time -->
+                            <td><span class="status status-approved">Confirmed</span></td>
+                            <td>
+                                <form action="{{ url_for('admin_cancel_booking', booking_id=booking[0]) }}" method="post">
+                                    <button class="btn btn-danger btn-sm">Cancel</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Add Room Section -->
+        <div id="add-room" class="content-section" style="display: none;">
+            <h2>Add New Room</h2>
+            <form method="POST" action="/admin/add-room">
+                <div class="form-group">
+                    <label for="room-number">Room Number</label>
+                    <input type="text" id="room-number" name="room_number" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="room-type">Room Type</label>
+                    <select id="room-type" name="room_type" class="form-control" required>
+                        <option value="">Select Room Type</option>
+                        <option value="Classroom">Classroom</option>
+                        <option value="Lecture Hall">Lecture Hall</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="room-capacity">Capacity</label>
+                    <input type="number" id="room-capacity" name="capacity" class="form-control" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Room Features</label>
+                    <div class="features-container">
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="projector" name="features" value="Projector">
+                            <label for="projector">Projector</label>
+                        </div>
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="whiteboard" name="features" value="Whiteboard">
+                            <label for="whiteboard">Whiteboard</label>
+                        </div>
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="ac" name="features" value="AC">
+                            <label for="ac">Air Conditioning</label>
+                        </div>
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="tv" name="features" value="TV">
+                            <label for="tv">TV</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add Room</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Delete Room Section -->
+        <div id="delete-room" class="content-section" style="display: none;">
+            <h2>Delete Room</h2>
+            <div class="card">
+                <p>Search for the room you want to delete:</p>
+                <form method="POST" action="/admin/delete-room">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="room_number" placeholder="Enter room number" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete Room</button>
+                </form>
+            </div>
+        </div>
+
+        
+        <!-- Update Room Section -->
+        <div id="update-room" class="content-section" style="display: none;">
+            <h2>Update Room</h2>
+            <form action="{{ url_for('update_room') }}" method="post">
+                <div class="form-group">
+                    <label>Room Number</label>
+                    <input type="text" name="room_number" class="form-control" placeholder="Enter room number to update" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Room Status</label>
+                    <select name="room_status" class="form-control">
+                        <option value="">Select new room status</option>
+                        <option value="Available">Available</option>
+                        <option value="Occupied">Occupied</option>
+                        <option value="Under Maintenance">Under Maintenance</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Capacity</label>
+                    <input type="number" name="room_capacity" class="form-control" min="1" placeholder="Enter new capacity">
+                </div>
+
+                <div class="form-group">
+                    <label>Room Features</label>
+                    <div class="features-container">
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="update-projector" name="features" value="Projector">
+                            <label for="update-projector">Projector</label>
+                        </div>
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="update-whiteboard" name="features" value="Whiteboard">
+                            <label for="update-whiteboard">Whiteboard</label>
+                        </div>
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="update-ac" name="features" value="AC">
+                            <label for="update-ac">Air Conditioning</label>
+                        </div>
+                        <div class="feature-checkbox">
+                            <input type="checkbox" id="update-tv" name="features" value="TV">
+                            <label for="update-tv">TV</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Room</button>
+            </form>
+        </div>
+        <!-- Room List Section -->
+        <div id="room-list" class="content-section" style="display: none;">
+            <h2>Room List</h2>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Capacity</th>
+                        <th>Facilities</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for room in rooms %}
+                    <tr>
+                        <td>{{ room[0] }}</td> <!-- room_number -->
+                        <td>{{ room[1] }}</td> <!-- room_capacity -->
+                        <td>{{ room[2] }}</td> <!-- room_facilities -->
+                        <td>{{ room[3] }}</td> <!-- room_status -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </main>
+
+        <!-- JavaScript -->
+        <script>
+            function showSection(event, sectionId) {
+            // Hide all content sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                document.getElementById(sectionId).style.display = 'block';
+
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                
+                document.getElementById('recent-bookings').style.display = 'block';
+
+        
+                document.querySelectorAll('.btn-info').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        alert('Booking details would be displayed here');
+                });
+            });
+
+                document.querySelectorAll('.btn-success').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const row = this.closest('tr');
+                        row.querySelector('.status').className = 'status status-approved';
+                        row.querySelector('.status').textContent = 'Approved';
+                        alert('Request has been approved');
+                    });
+                });
+
+                document.querySelectorAll('.btn-danger').forEach(btn => {
+                    if (!btn.classList.contains('btn-delete-room')) {
+                        btn.addEventListener('click', function () {
+                            if (confirm('Are you sure you want to deny this request?')) {
+                                const row = this.closest('tr');
+                                row.querySelector('.status').className = 'status status-rejected';
+                                row.querySelector('.status').textContent = 'Rejected';
+                                alert('Request has been denied');
+                            }
+                        });
+                    }
+                });
+            });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const flashContainer = document.getElementById('flash-messages');
+                    if (flashContainer) {
+                        setTimeout(() => {
+                            flashContainer.style.opacity = '0';
+                            setTimeout(() => {
+                                flashContainer.remove();
+                            }, 500); // Wait for transition to finish
+                        }, 3000); // Flash message disappears after 3 seconds
+                     }
+                });
+        </script>
+</body>
+</html>
