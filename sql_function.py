@@ -30,7 +30,6 @@ def login(username, password):
     else:
         return None,"Invalid username or password"
     
-    
 def add_room(room_number, room_capacity, room_facilities, room_status, user_role):
     if user_role != "admin":
         return "Restricted access,please contact admin."
@@ -47,7 +46,7 @@ def add_room(room_number, room_capacity, room_facilities, room_status, user_role
     finally:
         conn.close()
 
-def update_room(room_number, room_capacity=None, room_facilities=None, room_status=None, user_role=None):
+def update_room_in_db(*, room_number, room_capacity=None, room_facilities=None, room_status=None, user_role=None):
     if user_role != "admin":
         return "Restricted access,please contact admin"
     
@@ -146,12 +145,19 @@ def delete_room(room_number, user_role):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM rooms WHERE room_number = ?", (room_number,))
+    try:
+        # First delete all bookings related to the room
+        cursor.execute("DELETE FROM bookings WHERE room_number = ?", (room_number,))
+        
+        # Then delete the room
+        cursor.execute("DELETE FROM rooms WHERE room_number = ?", (room_number,))
 
-    conn.commit()
-    conn.close()
-
-    return f"Room {room_number} deleted."
+        conn.commit()
+        return f"Room {room_number} and all its bookings have been deleted."
+    except Exception as e:
+        return f"Error occurred: {e}"
+    finally:
+        conn.close()
 
 def cancel_booking(username, booking_id):
     conn = sqlite3.connect("booking_database.db")
@@ -169,29 +175,6 @@ def cancel_booking(username, booking_id):
 
     conn.close()
     return result
-
-def request_admin_access(username):
-    conn = sqlite3.connect("booking_database.db")
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT role, is_approved FROM users WHERE username = ?", (username,))
-    user = cursor.fetchone()
-
-    if not user:
-        conn.close()
-        return "User not found."
-
-    role, is_approved = user
-    if role == 'admin':
-        conn.close()
-        return "You are already an admin."
-    elif role == 'pending_admin':
-        conn.close()
-        return "Admin request already submitted. Please wait for approval."
-
-    cursor.execute("UPDATE users SET role = 'pending_admin', is_approved = 0 WHERE username = ?", (username,))
-    conn.commit()
-    conn.close()
 
     return "Admin request submitted. Awaiting approval."
 #testing
