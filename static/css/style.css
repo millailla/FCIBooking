@@ -2,54 +2,129 @@ body {
     font-family: 'Times New Roman', Times, serif, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #ffffff;
+    color: #333333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    text-align: center;
+    font-weight: normal;
+    position: relative;
+    top: 0px;
 }
 
 header {
-    background-color: #333;
+    background-color: #333333;
     color: white;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-header .logo {
+header .logo, header h1 {
     font-size: 24px;
     font-weight: bold;
+    margin: 0;
 }
 
 nav ul {
     list-style: none;
     display: flex;
     gap: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 nav a {
     color: white;
     text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ff5722;
 }
 
 .hero {
-    background: url('hero-image.jpg') no-repeat center center/cover;
+    background: no-repeat center center/cover;
     color: white;
     text-align: center;
     padding: 100px 20px;
 }
 
-.search-form {
-    margin-top: 20px;
+.hero {
+    color: #333333; /* dark gray */
 }
 
-.search-form input {
-    padding: 10px;
-    margin: 5px;
+.hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem; 
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.btn-primary {
+    display: inline-block;
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem 0;
+    font-size: 36px;
+    font-weight: 700;
+    background-color: #ff5722
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    user-select: none;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #e64a19; 
+    transform: scale(1.03);
+    outline: none;
+}
+
+.btn-secondary {
+    display: inline-block;
+    width: 160px;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #ff8a50; 
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    margin-top: 1rem;
+    user-select: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: #ff6f3d
+    transform: scale(1.02);
+    outline: none;
 }
 
 .search-form button {
-    padding: 10px 20px;
-    border: none;
+    padding: 30px 50px;
+    font-size: large;
+    border: black;
     border-radius: 5px;
     background-color: #ff5722;
     color: white;
@@ -70,12 +145,8 @@ nav a {
     overflow: hidden;
 }
 
-.listing img {
-    width: 100%;
-}
-
 footer {
-    background-color: #333;
+    background-color: #333333;
     color: white;
     text-align: center;
     padding: 10px 0;
@@ -83,3 +154,25 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.flashes .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flashes .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
