@@ -1,8 +1,6 @@
 import sqlite3
 
 
-def is_admin():
-    return session.get("role") == "admin"
 
 def add_user(username, email, password, role="user"):
     conn = sqlite3.connect("booking_database.db")
@@ -32,14 +30,6 @@ def login(username, password):
     else:
         return None,"Invalid username or password"
     
-def log_out():
-    global session
-    if session["logged_in"]:
-        user = session["logged_in"]
-        session["logged_in"] = None
-        return f"{user} logged out"
-    else:
-        return "no user logged in" 
     
 def add_room(room_number, room_capacity, room_facilities, room_status, user_role):
     if user_role != "admin":
@@ -111,8 +101,7 @@ def view_rooms():
     return rooms
 
 
-def book_room(username, room_number, date, time):
-
+def book_room(username, room_number, date, start_time, end_time):
     conn = sqlite3.connect("booking_database.db")
     cursor = conn.cursor()
 
@@ -121,8 +110,6 @@ def book_room(username, room_number, date, time):
         user = cursor.fetchone()
         if not user:
             return "User does not exist."
-        if user[0] == 0:
-            return "User is not approved to make bookings."
 
         cursor.execute("SELECT * FROM rooms WHERE room_number = ?", (room_number,))
         if not cursor.fetchone():
@@ -130,18 +117,21 @@ def book_room(username, room_number, date, time):
 
         cursor.execute("""
             SELECT * FROM bookings
-            WHERE room_number = ? AND date = ? AND time = ?
-        """, (room_number, date, time))
+            WHERE room_number = ? AND date = ?
+            AND (
+                (? < end_time AND ? > start_time)
+            )
+        """, (room_number, date, start_time, end_time))
         if cursor.fetchone():
-            return f"Room {room_number} is already booked on {date} at {time}."
+            return f"Room {room_number} is already booked on {date} between {start_time} and {end_time}."
 
         cursor.execute("""
-            INSERT INTO bookings (username, room_number, date, time)
-            VALUES (?, ?, ?, ?)
-        """, (username, room_number, date, time))
+            INSERT INTO bookings (username, room_number, date, start_time, end_time)
+            VALUES (?, ?, ?, ?, ?)
+        """, (username, room_number, date, start_time, end_time))
         conn.commit()
 
-        return f"Room {room_number} successfully booked by {username} on {date} at {time}."
+        return f"Room {room_number} successfully booked by {username} on {date} from {start_time} to {end_time}."
 
     except Exception as e:
         return f"An error occurred: {e}"
@@ -179,8 +169,30 @@ def cancel_booking(username, booking_id):
 
     conn.close()
     return result
+
+def request_admin_access(username):
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT role, is_approved FROM users WHERE username = ?", (username,))
+    user = cursor.fetchone()
+
+    if not user:
+        conn.close()
+        return "User not found."
+
+    role, is_approved = user
+    if role == 'admin':
+        conn.close()
+        return "You are already an admin."
+    elif role == 'pending_admin':
+        conn.close()
+        return "Admin request already submitted. Please wait for approval."
+
+    cursor.execute("UPDATE users SET role = 'pending_admin', is_approved = 0 WHERE username = ?", (username,))
+    conn.commit()
+    conn.close()
+
+    return "Admin request submitted. Awaiting approval."
 #testing
 
-
-print(login("ash1542", "ayamas"))
-print(book_room("ash", "CQAR1001", "2025-06-15", "10:00"))
