@@ -30,11 +30,15 @@
     <!-- Main Content Area -->
     <main class="main-content">
         <!-- Flash Messages -->
-            <div id="flash-messages" class="flash-messages">
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+             {% if messages %}
+                 <div id="flash-messages" class="flash-messages-container">
+                      {% for category, message in messages %}
+                         <div class="flash-message {{ category }}">{{ message }}</div>
+                      {% endfor %}
+                 </div>
+             {% endif %}
+            {% endwith %}
         <!-- Recent Bookings Section (default visible) -->
         <div id="recent-bookings" class="content-section">
             <h2>Recent Bookings</h2>
@@ -44,8 +48,9 @@
                         <th>Booking ID</th>
                         <th>Guest Name</th>
                         <th>Room</th>
-                        <th>Check-In</th>
-                        <th>Check-Out</th>
+                        <th>Date</th>
+                        <th>Start</th>
+                        <th>End</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -57,7 +62,8 @@
                             <td>{{ booking[1] }}</td> <!-- Username -->
                             <td>{{ booking[2] }}</td> <!-- Room -->
                             <td>{{ booking[3] }}</td> <!-- Date -->
-                            <td>{{ booking[4] }}</td> <!-- Time -->
+                            <td>{{ booking[4] }}</td> <!-- Start Time -->
+                            <td>{{ booking[5] }}</td> <!-- End Time -->
                             <td><span class="status status-approved">Confirmed</span></td>
                             <td>
                                 <form action="{{ url_for('admin_cancel_booking', booking_id=booking[0]) }}" method="post">

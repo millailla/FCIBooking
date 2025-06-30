@@ -274,10 +274,20 @@ def add_room_route():
     room_facilities = ', '.join(request.form.getlist('features'))
     room_status = "available"
 
-    # Call the add_room function
+    conn = sqlite3.connect("booking_database.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM rooms WHERE room_number = ?", (room_number,))
+    existing_room = cursor.fetchone()
+    conn.close()
+
+    if existing_room:
+        flash(f"Room {room_number} already exists. Please recheck and reconfirm room that want to be added.", "error")
+        return redirect(url_for('admin_dashboard'))
+
+    # Proceed to add the room
     result = add_room(room_number, room_capacity, room_facilities, room_status, session['role'])
 
-    flash(result)
+    flash(result, "success" if "successfully" in result.lower() else "error")
     return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/delete-room', methods=['POST'])
